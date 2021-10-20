@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/distillery/aws/fun-facts-fetcher/httpclient"
-	"github.com/distillery/aws/fun-facts-fetcher/model"
+	"github.com/fun-facts-fetcher/httpclient"
+	"github.com/fun-facts-fetcher/model"
 )
 
 var funFactFetcher FunFactFetcher

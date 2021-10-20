@@ -1,3 +1,3 @@
-module github.com/distillery/aws/fun-facts-fetcher
+module github.com/fun-facts-fetcher
 
 go 1.17

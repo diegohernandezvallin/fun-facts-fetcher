@@ -16,3 +16,6 @@
 
 # VS Code files
 .vscode/*
+
+# Binaries
+bin/*

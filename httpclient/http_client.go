@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/distillery/aws/fun-facts-fetcher/model"
+	"github.com/fun-facts-fetcher/model"
 )
 
 const (

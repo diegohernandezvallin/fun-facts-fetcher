@@ -4,8 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	_ "github.com/distillery/aws/fun-facts-fetcher/httpclient"
-	"github.com/distillery/aws/fun-facts-fetcher/model"
+	"github.com/fun-facts-fetcher/model"
 )
 
 const (
