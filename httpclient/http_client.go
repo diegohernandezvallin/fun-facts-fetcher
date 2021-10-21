@@ -24,7 +24,7 @@ type HttpClientHandler struct {
 	Client *http.Client
 }
 
-func NewHttpHandler(client *http.Client) HttpClient {
+func NewHttpHandler(client *http.Client) HttpClientHandler {
 	if httpClientHandler.Client == nil {
 		httpClientHandler = HttpClientHandler{
 			Client: client,

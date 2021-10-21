@@ -40,7 +40,7 @@ func (funFactFetcher FunFactFetcher) Fetch(url string) (model.FunFact, error) {
 	return funFact, nil
 }
 
-func NewFunFactFetcher(httpClientHandler httpclient.HttpClient) Fetcher {
+func NewFunFactFetcher(httpClientHandler httpclient.HttpClient) FunFactFetcher {
 	if funFactFetcher.HttpClientHandler == nil {
 		funFactFetcher = FunFactFetcher{
 			HttpClientHandler: httpClientHandler,
