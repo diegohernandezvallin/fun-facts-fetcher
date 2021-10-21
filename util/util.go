@@ -1,6 +1,11 @@
 package util
 
-import "os"
+import (
+	"io"
+	"io/ioutil"
+	"os"
+	"strings"
+)
 
 func Getenv(key, fallback string) string {
 	value := os.Getenv(key)
@@ -9,4 +14,10 @@ func Getenv(key, fallback string) string {
 	}
 
 	return value
+}
+
+func StrToReadCloser(str string) io.ReadCloser {
+	r := ioutil.NopCloser(strings.NewReader(str))
+
+	return r
 }
