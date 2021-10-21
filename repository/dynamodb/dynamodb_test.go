@@ -42,8 +42,6 @@ func TestPutItemInDynamodbSuccessfully(t *testing.T) {
 	err := dynamodbRepository.PutItem(funFactItem)
 
 	assert.NoError(t, err, nil, "no error was expected")
-
-	t.Cleanup(teardown)
 }
 
 func TestPutItemInDynamodbError(t *testing.T) {
@@ -64,10 +62,4 @@ func TestPutItemInDynamodbError(t *testing.T) {
 	err := dynamodbRepository.PutItem(funFactItem)
 
 	assert.Error(t, err, "error expected")
-
-	t.Cleanup(teardown)
-}
-
-func teardown() {
-	dynamodbRepository = DynamodbRepository{}
 }
