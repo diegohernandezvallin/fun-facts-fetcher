@@ -16,11 +16,11 @@ type Fetcher interface {
 }
 
 type FunFactFetcher struct {
-	HttpClientHandler httpclient.HttpClient
+	httpClientHandler httpclient.HttpClient
 }
 
 func (funFactFetcher FunFactFetcher) Fetch(url string) (model.FunFact, error) {
-	httpClientResponse, err := funFactFetcher.HttpClientHandler.Get(url)
+	httpClientResponse, err := funFactFetcher.httpClientHandler.Get(url)
 	if err != nil {
 		return model.FunFact{}, err
 	}
@@ -41,9 +41,9 @@ func (funFactFetcher FunFactFetcher) Fetch(url string) (model.FunFact, error) {
 }
 
 func NewFunFactFetcher(httpClientHandler httpclient.HttpClient) FunFactFetcher {
-	if funFactFetcher.HttpClientHandler == nil {
+	if funFactFetcher.httpClientHandler == nil {
 		funFactFetcher = FunFactFetcher{
-			HttpClientHandler: httpClientHandler,
+			httpClientHandler: httpClientHandler,
 		}
 	}
 
