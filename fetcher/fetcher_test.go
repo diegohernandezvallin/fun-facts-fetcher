@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/fun-facts-fetcher/model"
+	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -14,84 +15,52 @@ const (
 	anyUrl = ""
 )
 
-type okHttpClient struct {
+type mockHttpClient struct {
+	do func(request *http.Request) (model.HttpClientResponse, error)
 }
 
-func (okHttpClient okHttpClient) Get(url string) (model.HttpClientResponse, error) {
-	return okHttpClient.Do(&http.Request{})
+func (mock mockHttpClient) Do(request *http.Request) (model.HttpClientResponse, error) {
+	return mock.do(request)
 }
 
-func (okHttpClient okHttpClient) Do(request *http.Request) (model.HttpClientResponse, error) {
-	okResponse := model.HttpClientResponse{
-		ResponseBody: []byte(okResponseBody),
-		StatusCode:   http.StatusOK,
-	}
-
-	return okResponse, nil
-}
-
-type notFoundHttpClient struct {
-}
-
-func (notFoundHttpClient notFoundHttpClient) Get(url string) (model.HttpClientResponse, error) {
-	return notFoundHttpClient.Do(&http.Request{})
-}
-
-func (notFoundHttpClient notFoundHttpClient) Do(request *http.Request) (model.HttpClientResponse, error) {
-	notFoundResponse := model.HttpClientResponse{
-		ResponseBody: []byte(notFoundResponseBody),
-		StatusCode:   http.StatusNotFound,
-	}
-
-	return notFoundResponse, nil
+func (mock mockHttpClient) Get(url string) (model.HttpClientResponse, error) {
+	return mock.do(&http.Request{})
 }
 
 func TestFetcherOk(t *testing.T) {
-	var (
-		mockHttpClient     okHttpClient
-		testFunFactFecther Fetcher
+	mock := mockHttpClient{
+		do: func(request *http.Request) (model.HttpClientResponse, error) {
+			okResponse := model.HttpClientResponse{
+				ResponseBody: []byte(okResponseBody),
+				StatusCode:   http.StatusOK,
+			}
 
-		result model.FunFact
-	)
-
-	mockHttpClient = okHttpClient{}
-	testFunFactFecther = NewFunFactFetcher(mockHttpClient)
-
-	result, err := testFunFactFecther.Fetch(anyUrl)
-	if err != nil {
-		t.Fatalf("Expected no error. Got error: %v", err)
+			return okResponse, nil
+		},
 	}
+	funFactFetcher.httpClientHandler = mock
 
-	if result.Data.Fact == "" {
-		t.Fatalf("Expected fun fact, got an empty one")
-	}
+	actual, err := funFactFetcher.Fetch(anyUrl)
 
-	t.Cleanup(teardown)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, actual.Data.Fact)
 }
 
 func TestFetcherNotFound(t *testing.T) {
-	var (
-		mockHttpClient     notFoundHttpClient
-		testFunFactFecther Fetcher
+	mock := mockHttpClient{
+		do: func(request *http.Request) (model.HttpClientResponse, error) {
+			notFoundResponse := model.HttpClientResponse{
+				ResponseBody: []byte(notFoundResponseBody),
+				StatusCode:   http.StatusNotFound,
+			}
 
-		result model.FunFact
-	)
-
-	mockHttpClient = notFoundHttpClient{}
-	testFunFactFecther = NewFunFactFetcher(mockHttpClient)
-
-	result, err := testFunFactFecther.Fetch(anyUrl)
-	if err == nil {
-		t.Fatalf("Expected error. No error recieved")
+			return notFoundResponse, nil
+		},
 	}
+	funFactFetcher.httpClientHandler = mock
 
-	if result.Data.Fact != "" {
-		t.Fatalf("Expected empty fact. Got fact: %s", result.Data.Fact)
-	}
+	actual, err := funFactFetcher.Fetch(anyUrl)
 
-	t.Cleanup(teardown)
-}
-
-func teardown() {
-	funFactFetcher = FunFactFetcher{}
+	assert.Error(t, err)
+	assert.Empty(t, actual.Data.Fact)
 }
