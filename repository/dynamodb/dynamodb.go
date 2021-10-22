@@ -18,7 +18,7 @@ type DynamodbRepository struct {
 	tableName string
 }
 
-func NewDynamoRepository(tableName string, db dynamodbiface.DynamoDBAPI) DynamodbRepository {
+func NewDynamodbRepository(tableName string, db dynamodbiface.DynamoDBAPI) DynamodbRepository {
 	if dynamodbRepository.db == nil {
 		dynamodbRepository.db = db
 		dynamodbRepository.tableName = tableName
