@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/fun-facts-fetcher/fetcher"
 	"github.com/fun-facts-fetcher/httpclient"
+	"github.com/fun-facts-fetcher/publishing"
 	snsService "github.com/fun-facts-fetcher/publishing/sns"
 	"github.com/fun-facts-fetcher/repository"
 	dynamoDBRepository "github.com/fun-facts-fetcher/repository/dynamodb"
@@ -22,10 +23,9 @@ const (
 )
 
 type awsLambda struct {
-	httpClientHandler  httpclient.HttpClientHandler
-	funFactFetcher     fetcher.FunFactFetcher
-	dynamodbRepository dynamoDBRepository.DynamodbRepository
-	snsPublisher       snsService.SnsPublisher
+	funFactFetcher     fetcher.Fetcher
+	dynamodbRepository repository.Repository
+	snsPublisher       publishing.Publisher
 
 	funFactApiUrl string
 }
@@ -49,7 +49,6 @@ func newAwsLambda() *awsLambda {
 	snsPublisher := snsService.NewSnsPublisher(snsClient, snsTopic)
 
 	return &awsLambda{
-		httpClientHandler:  httpClientHandler,
 		funFactFetcher:     funFactFetcher,
 		dynamodbRepository: dynamodbRepository,
 		snsPublisher:       snsPublisher,
