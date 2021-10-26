@@ -1,8 +1,7 @@
 resource "aws_cloudwatch_event_rule" "daily" {
   name                = "daily"
   description         = "Fires daily at midday"
-  //schedule_expression = "cron(30 12 * * ? *)" uncomment after testing
-  schedule_expression = "rate(1 minute)" //remove once deploy to prod
+  schedule_expression = "cron(30 12 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "fun_facts_fetcher_lambda_daily" {
