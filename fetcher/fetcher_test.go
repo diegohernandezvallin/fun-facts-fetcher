@@ -11,6 +11,7 @@ import (
 const (
 	okResponseBody       = `{"status":true,"data":{"id":"70","fact":"Smoking will void your Apple warranty.","cat":"tech","hits":"305"}}`
 	notFoundResponseBody = "Requested url not found in this server"
+	notAJSONResponseBody = "not a json"
 
 	anyUrl = ""
 )
@@ -63,4 +64,22 @@ func TestFetcherNotFound(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Empty(t, actual.Data.Fact)
+}
+
+func TestFetcherNotAJSONResponse(t *testing.T) {
+	mock := mockHttpClient{
+		do: func(request *http.Request) (model.HttpClientResponse, error) {
+			notFoundResponse := model.HttpClientResponse{
+				ResponseBody: []byte(notAJSONResponseBody),
+				StatusCode:   http.StatusInternalServerError,
+			}
+
+			return notFoundResponse, nil
+		},
+	}
+	funFactFetcher.httpClientHandler = mock
+
+	_, err := funFactFetcher.Fetch(anyUrl)
+
+	assert.Error(t, err)
 }

@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/fun-facts-fetcher/cmd"
 )
 
 func HandleRequest(ctx context.Context) (string, error) {
-	awsLambda := newAwsLambda()
+	awsLambda := cmd.NewAwsLambda()
 
-	return awsLambda.fetchDailyFunFact()
+	return awsLambda.FetchDailyFunFact()
 }
 
 func main() {

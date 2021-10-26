@@ -34,7 +34,8 @@ func (funFactFetcher FunFactFetcher) Fetch(url string) (model.FunFact, error) {
 	var funFact model.FunFact
 	err = json.Unmarshal(httpClientResponse.ResponseBody, &funFact)
 	if err != nil {
-		return model.FunFact{}, err
+		erroMsg := fmt.Errorf("unable to unmarshal response. error: %v", err)
+		return model.FunFact{}, erroMsg
 	}
 
 	return funFact, nil
