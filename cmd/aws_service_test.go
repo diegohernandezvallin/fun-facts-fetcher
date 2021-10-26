@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -68,7 +68,7 @@ func TestFetchDailyFunFactOk(t *testing.T) {
 		funFactFetcher:     &funFactFetcherMock,
 	}
 
-	actual, err := awsLambda.fetchDailyFunFact()
+	actual, err := awsLambda.FetchDailyFunFact()
 	assert.NoError(t, err)
 	assert.NotEmpty(t, actual)
 }
@@ -98,7 +98,7 @@ func TestFetchDailyFunFactUrlNotFound(t *testing.T) {
 		funFactFetcher:     &funFactFetcherMock,
 	}
 
-	actual, err := awsLambda.fetchDailyFunFact()
+	actual, err := awsLambda.FetchDailyFunFact()
 	assert.Error(t, err)
 	assert.Empty(t, actual)
 }

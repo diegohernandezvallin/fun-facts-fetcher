@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"net/http"
@@ -30,7 +30,7 @@ type awsLambda struct {
 	funFactApiUrl string
 }
 
-func newAwsLambda() *awsLambda {
+func NewAwsLambda() *awsLambda {
 	funFactApiUrl := util.Getenv(funFactApiUrlKey, "")
 	tableName := util.Getenv(tableNameKey, "")
 	snsTopic := util.Getenv(snsTopicKey, "")
@@ -56,7 +56,7 @@ func newAwsLambda() *awsLambda {
 	}
 }
 
-func (awsLambda *awsLambda) fetchDailyFunFact() (string, error) {
+func (awsLambda *awsLambda) FetchDailyFunFact() (string, error) {
 	funFact, err := awsLambda.funFactFetcher.Fetch(awsLambda.funFactApiUrl)
 	if err != nil {
 		return "", err
